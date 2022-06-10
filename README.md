@@ -5,7 +5,7 @@ This repository corresponds to the work entitled "Robot Mapping of 3D Floorplans
 ### Video
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=GkjAFzaJcjs" target="_blank">
- <img src="http://img.youtube.com/vi/GkjAFzaJcjs/mqdefault.jpg" alt="Watch the video" width="240" height="180" border="100" />
+ <img src="http://img.youtube.com/vi/GkjAFzaJcjs/mqdefault.jpg" alt="Watch the video" width="427" height="240" border="100" />
 </a>
 
 ### Abstract
