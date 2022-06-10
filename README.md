@@ -1,6 +1,12 @@
 # 3D-Floorplan-Reconstruction
 
-This repository corresponds to the work entitled "Robot Mapping of 3D Floorplans with an RGB-D camera" and submitted to IEEE Robotics and Automation Letters. The code will be released if the work is accepted.
+This repository corresponds to the work entitled "Robot Mapping of 3D Floorplans with an RGB-D camera" and submitted to IEEE Robotics and Automation Letters and 2022 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS 2022). The code will be released if the work is accepted.
+
+### Video
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=GkjAFzaJcjs" target="_blank">
+ <img src="http://img.youtube.com/vi/GkjAFzaJcjs/mqdefault.jpg" alt="Watch the video" width="240" height="180" border="100" />
+</a>
 
 ### Abstract
 
