@@ -18,7 +18,7 @@ This work presents a novel 3D reconstruction method to obtain the floor plan of 
 The code of Sigma-FP is available as a ROS package at <a href="https://github.com/MAPIRlab/Sigma-FP">https://github.com/MAPIRlab/Sigma-FP</a>.
 
 ### Method&nbsp;Overview
-<img alt="Method Overview" src="[https://github.com/MAPIRlab/Sigma-FP/blob/gh-pages/overview_floorplan.jpg?raw=true">
+<img alt="Method Overview" src="https://github.com/MAPIRlab/Sigma-FP/blob/gh-pages/overview_floorplan.jpg?raw=true">
 
 ### Qualitative&nbsp;Results
 
