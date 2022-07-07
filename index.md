@@ -1,8 +1,11 @@
-## Sigma-FP
 
-You can use the [editor on GitHub](https://github.com/MAPIRlab/Sigma-FP/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+## <p align="center"> Sigma-FP: Robot Mapping of 3D Floor Plans<br/> with an RGB-D Camera under Uncertainty  </p>
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+<p align="center"> <a href="https://mapir.isa.uma.es/mapirwebsite/?p=1792">Jose-Luis Matez-Bandera</a><sup>1</sup>, <a href="https://mapir.isa.uma.es/mapirwebsite/?p=1438">Javier Monroy</a><sup>1</sup> and <a href="http://mapir.isa.uma.es/jgonzalez">Javier Gonzalez-Jimenez</a><sup>1</sup> </p>
+
+<p align="center"> <sup>1</sup> Machine Perception and Intelligent Robotics (MAPIR) Group,<br/> Malaga Institute for Mechatronics Engineering and Cyber-Physical Systems (IMECH.UMA).<br/> University of Malaga. Spain. </p>
+
+You can use the [editor on GitHub](https://mapir.isa.uma.es/mapirwebsite/?p=1792) to maintain and preview the content for your website in Markdown files.
 
 ### Markdown
 
