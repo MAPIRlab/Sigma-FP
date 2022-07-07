@@ -15,21 +15,19 @@ This work presents a novel 3D reconstruction method to obtain the floor plan of 
 
 ### Code
 
-The code of Sigma-FP is available as a ROS package at https://github.com/MAPIRlab/Sigma-FP.
+The code of Sigma-FP is available as a ROS package at <a href="https://github.com/MAPIRlab/Sigma-FP">https://github.com/MAPIRlab/Sigma-FP</a>.
 
 ### Method&nbsp;Overview
-
-![](https://github.com/MAPIRlab/Sigma-FP/blob/gh-pages/overview_floorplan.jpg)
+<img alt="Method Overview" src="https://github.com/MAPIRlab/Sigma-FP/blob/gh-pages/overview_floorplan.jpg">
 
 ### Qualitative&nbsp;Results
 
-![](https://github.com/MAPIRlab/Sigma-FP/blob/gh-pages/qualitative.png)
+<img alt="Method Overview" src="https://github.com/MAPIRlab/Sigma-FP/blob/gh-pages/qualitative.png">
 
 ### Citation
 ```
 @article{matez2022,
     title={Sigma-FP: Robot Mapping of 3D Floor Plans with an RGB-D Camera under Uncertainty},
-    author={Matez-Bandera, Jose-Luis and Monroy, Javier and Gonzalez-Jimenez, Javier},,
+    author={Matez-Bandera, Jose-Luis and Monroy, Javier and Gonzalez-Jimenez, Javier},
     year={2022},
-    note={Under Review}
-}
+    note={Under Review}}
