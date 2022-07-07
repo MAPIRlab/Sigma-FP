@@ -11,6 +11,16 @@ This work presents a novel 3D reconstruction method to obtain the floor plan of 
 
 ### Demonstration&nbsp;Video
 
+<iframe
+    width="640"
+    height="480"
+    src="[https://www.youtube.com/embed/UmX4kyB2wfg](https://youtu.be/cFv2LAA0vMg)"
+    frameborder="0"
+    allow="autoplay; encrypted-media"
+    allowfullscreen
+>
+</iframe>
+
 [![Watch the video](https://img.youtube.com/vi/cFv2LAA0vMg/maxresdefault.jpg)](https://youtu.be/cFv2LAA0vMg)
 
 ### Code
