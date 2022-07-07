@@ -1,5 +1,5 @@
 
-## Sigma-FP: Robot Mapping of 3D Floor Plans<br/> with an RGB-D Camera under Uncertainty 
+
 
 <p align="center"> <a href="https://mapir.isa.uma.es/mapirwebsite/?p=1792">Jose-Luis Matez-Bandera</a><sup>1</sup>, <a href="https://mapir.isa.uma.es/mapirwebsite/?p=1438">Javier Monroy</a><sup>1</sup> and <a href="http://mapir.isa.uma.es/jgonzalez">Javier Gonzalez-Jimenez</a><sup>1</sup> </p>
 
