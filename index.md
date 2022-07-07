@@ -14,7 +14,7 @@ This work presents a novel 3D reconstruction method to obtain the floor plan of 
 <iframe
     width="640"
     height="480"
-    src="[https://www.youtube.com/embed/UmX4kyB2wfg](https://youtu.be/cFv2LAA0vMg)"
+    src="https://youtu.be/cFv2LAA0vMg"
     frameborder="0"
     allow="autoplay; encrypted-media"
     allowfullscreen
