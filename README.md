@@ -19,6 +19,11 @@
 
 ### Requirements
 
+Sigma-FP has been released as a ROS package and works with Python 2.7. To install requirements, execute:
+
+<code>cd Sigma-SP</code>
+<code>pip install -r requirements.txt</code>
+
 ### Configuration
 
 ### How to Run
