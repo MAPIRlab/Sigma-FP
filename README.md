@@ -17,14 +17,22 @@
     }
 </code></pre>
 
-### Requirements
+### Installation and Requirements
+
+Clone the repository:
+
+<code>git clone https://github.com/MAPIRlab/Sigma-FP.git</code><br/>
 
 Sigma-FP has been released as a ROS package and works with Python 2.7. To install requirements, execute:
 
 <code>cd Sigma-SP</code><br/>
 <code>pip install -r requirements.txt</code><br/>
 
-Sigma-FP requires a per-pixel semantic segmentation network to run. 
+Build ROS workspace:
+<code>cd ~/your_ros_workspace</code><br/>
+<code>cd catkin_make</code>
+
+Sigma-FP requires a per-pixel semantic segmentation network to run. We have employed Detectron2, but any other per-pixel semantic segmentation network can be used, although Sigma-FP code will need to be slightly adapted. In case you wish to use Detectron2, we have released our adaptation in the following repository: [detectron2_ros_probs](https://github.com/josematez/detectron2_ros_probs). The installation instructions are available in the repository.
 
 ### Configuration
 
