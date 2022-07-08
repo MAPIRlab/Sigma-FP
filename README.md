@@ -27,6 +27,13 @@ Sigma-FP has been released as a ROS package and works with Python 2.7. To instal
 <code>cd Sigma-SP</code><br/>
 <code>pip install -r requirements.txt</code><br/>
 
+Additionally, it is required to install the following ROS packages:
+
+- [cv_bridge](http://wiki.ros.org/cv_bridge)
+- [tf2_ros](http://wiki.ros.org/tf2_ros)
+- [tf](http://wiki.ros.org/tf)
+- [message_filters](http://wiki.ros.org/message_filters)
+
 Build ROS workspace:
 
 <code>cd ~/your_ros_workspace</code><br/>
