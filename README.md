@@ -5,7 +5,7 @@
 <p align="center"> <sup>1</sup> Machine Perception and Intelligent Robotics (MAPIR) Group,<br/> Malaga Institute for Mechatronics Engineering and Cyber-Physical Systems (IMECH.UMA).<br/> University of Malaga. Spain. </p>
 
 ### Content
-<p align="center"> <a href="#citation">Citation</a>&nbsp;&nbsp;&nbsp;<a href="#requirements">Requirements</a>&nbsp;&nbsp;&nbsp;<a href="#configuration">Configuration</a>&nbsp;&nbsp;&nbsp;<a href="#howtorun">How to Run</a></p>
+<p align="center"> <a href="#citation">Citation</a>&nbsp;&nbsp;&nbsp;<a href="#installationandrequirements">Installation&nbsp;and&nbsp;Requirements</a>&nbsp;&nbsp;&nbsp;<a href="#configuration">Configuration</a>&nbsp;&nbsp;&nbsp;<a href="#howtorun">How&nbsp;to&nbsp;Run</a></p>
 
 ### Citation
 <pre><code>@article{matez2022,  
@@ -16,7 +16,7 @@
     }
 </code></pre>
 
-### Installation and Requirements
+### Installation&nbsp;and&nbsp;Requirements
 
 Clone the repository in the /src directory of your ROS workspace:
 
@@ -36,6 +36,56 @@ Sigma-FP requires a per-pixel semantic segmentation network to run. We have empl
 
 ### Configuration
 
-### How to Run
+Sigma-FP parameters are configured using launch parameters. The configurable parameters are:
+
+## Parameters
+```bash
+        # Name of the dataset to use (options: "RobotAtVirtualHome", "OpenLORIS", "Giraff" (this is for MAPIRlab) - leave empty for custom dataset)
+        <param name="dataset" value="Giraff"/>
+        # Topic where the RGB image is published
+        <param name="topic_cameraRGB" value="camera_down/rgb/image_raw/compressed"/>
+        # Topic where the Depth image is published
+        <param name="topic_cameraDepth" value="/camera_down/depth/image"/>
+        # Topic where the CNN results are published
+        <param name="topic_result" value="ViMantic/Detections"/>
+        # Topic where the CNN expects to receive the input image
+        <param name="topic_republic" value="ViMantic/ToCNN"/>
+        # Topic where the CNN publish the image including detections
+        <param name="topic_cnn" value="detectron2_ros/result"/>
+        # Debug option
+        <param name="debug" value="false"/>
+        # Image width
+        <param name="image_width" value="640"/>
+        # Image height
+        <param name="image_height" value="480"/>
+        # Intrinsic parameters of the camera
+        <param name="camera_cx" value="318.2640075683594"/>
+        <param name="camera_cy" value="237.88600158691406"/>
+        <param name="camera_fx" value="510.3919982910156"/>
+        <param name="camera_fy" value="510.3919982910156"/>
+        # Max range of the depth camera
+        <param name="camera_depth_max_range" value="10.0"/>
+        # Number of desired point to downsample each input point cloud
+        <param name="points_in_pcd" value="4000"/>
+        # Minimum number of points to accept a planar patch as a candidate
+        <param name="min_points_plane" value="100"/>
+        # Minimum width (in meters) of a planar patch to accept it as a candidate
+        <param name="min_plane_width" value="0.6"/>
+        # Minimum number of pixels to consider a region as a opening in the image plane
+        <param name="min_px_opening" value="8000"/>
+        # Threshold for the statistical distance of Bhattacharyya
+        <param name="bhattacharyya_threshold" value="7"/>
+        # Threshold for the minimum euclidean distance between walls (in meters)
+        <param name="euclidean_threshold" value="0.3"/>
+        # Epsilon for DBSCAN of the azimuth angle of the plane (in radians)
+        <param name="eps_alpha" value="1.0"/>
+        # Epsilon for DBSCAN of the elevation angle of the plane (in radians)
+        <param name="eps_beta" value="10.0"/>
+        # Epsilon for DBSCAN of the plane-to-origin distance (in meters)
+        <param name="eps_dist" value="0.02"/>
+       
+```
+
+### How&nbsp;to&nbsp;Run
 
 
