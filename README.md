@@ -29,6 +29,7 @@ Sigma-FP has been released as a ROS package and works with Python 2.7. To instal
 <code>pip install -r requirements.txt</code><br/>
 
 Build ROS workspace:
+
 <code>cd ~/your_ros_workspace</code><br/>
 <code>cd catkin_make</code>
 
