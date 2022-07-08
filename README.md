@@ -19,7 +19,7 @@
 
 ### Installation and Requirements
 
-Clone the repository:
+Clone the repository in the /src directory of your ROS workspace:
 
 <code>git clone https://github.com/MAPIRlab/Sigma-FP.git</code><br/>
 
