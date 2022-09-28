@@ -5,7 +5,7 @@
 <p align="center"> <sup>1</sup> Machine Perception and Intelligent Robotics (MAPIR) Group,<br/> Malaga Institute for Mechatronics Engineering and Cyber-Physical Systems (IMECH.UMA).<br/> University of Malaga. Spain. </p>
 
 ### Content
-<p align="center"> <a href="#citation">Citation</a>&nbsp;&nbsp;&nbsp;<a href="#installationandrequirements">Installation&nbsp;and&nbsp;Requirements</a>&nbsp;&nbsp;&nbsp;<a href="#configuration">Configuration</a>&nbsp;&nbsp;&nbsp;<a href="#howtorun">How&nbsp;to&nbsp;Run</a></p>
+<p align="center"> <a href="#citation">Citation</a>&nbsp;&nbsp;&nbsp;<a href="#installationandrequirements">Installation&nbsp;and&nbsp;Requirements</a>&nbsp;&nbsp;&nbsp;<a href="#configuration">Configuration</a>&nbsp;&nbsp;&nbsp;<a href="#howtorun">How&nbsp;to&nbsp;Run</a>&nbsp;&nbsp;&nbsp;<a href="#datasets">Datasets</a></p></p>
 
 ## <p align="center"> <sup></sup>The source code will be released once the work is accepted. </p>
 
@@ -110,3 +110,7 @@ Once the semantic segmentation network is ready, you can run Sigma-FP as follows
 <code>roslaunch sigmafp MAPIRlab.launch</code><br/>
 
 <i>*Note that it is an example with the MAPIRlab dataset. For custom data, please create a launch file following the examples given in the launch directory.</i>
+
+### Datasets
+
+If you are interested in reproducing results, please contact us at <a>josematez@uma.es</a> to provide the employed datasets.
