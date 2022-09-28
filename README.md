@@ -97,4 +97,16 @@ Sigma-FP parameters are configured using launch parameters. The configurable par
 
 ### How&nbsp;to&nbsp;Run
 
+First, run the semantic segmentation neural network. For example, if you are using our recommended neural network (), first you need to activate the virtual environment:
 
+<code>workon detectron2_ros</code><br/>
+
+Then, execute the launch file:
+
+<code>roslaunch detectron2_ros panoptic_detectron2_ros.launch</code><br/>
+
+Once the semantic segmentation network is ready, you can run Sigma-FP as follows*:
+
+<code>roslaunch sigmafp MAPIRlab.launch</code><br/>
+
+*Note that it is an example with the MAPIRlab dataset. For custom data, please create a launch file following the examples given in the launch directory.
