@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+
+    <arg name="launch_prefix" default="" />
+    <param name="/use_sim_time" value="true"/>
+
+    ### FLOORPLAN RECONSTRUCTION ###
+    <node name="sigmafp" pkg="sigmafp" type="fast-sigma-FP.py" output="screen">
+        <param name="dataset" value="OpenLORIS"/>
+        <param name="topic_cameraRGB" value="/d400/color/image_raw"/>
+        <param name="topic_cameraDepth" value="/d400/depth/image_raw"/>
+        <param name="topic_result" value="ViMantic/Detections"/>
+        <param name="topic_republic" value="ViMantic/ToCNN"/>
+        <param name="topic_cnn" value="detectron2_ros/result"/>
+        <param name="debug" value="true"/>
+        <param name="image_width" value="848"/>
+        <param name="image_height" value="480"/>
+        <param name="camera_cx" value="427.0083312988281"/>
+        <param name="camera_cy" value="245.2209014892578"/>
+        <param name="camera_fx" value="422.1437072753906"/>
+        <param name="camera_fy" value="422.1437072753906"/>
+        <param name="camera_depth_max_range" value="10.0"/>
+        <param name="min_reliable_depth_value" value="0.5"/>
+        <param name="max_reliable_depth_value" value="3.0"/>
+        <param name="points_in_pcd" value="5500"/>
+        <param name="min_points_plane" value="50"/>
+        <param name="min_plane_width" value="0.35"/>
+        <param name="min_px_opening" value="7000"/>
+        <param name="bhattacharyya_threshold" value="12"/>
+        <param name="euclidean_threshold" value="0.5"/>
+        <param name="eps_alpha" value="8.0"/>
+        <param name="eps_beta" value="8.0"/>
+        <param name="eps_dist" value="0.005"/>
+    </node>
+
+    ### NAVIGATION ###
+    <arg name="map_file" value="$(find sigmafp)/maps/openloris-home1-2.yaml"/>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" launch-prefix=""/>
+
+    ### RVIZ ###
+    <node name="rviz_player" pkg="rviz" type="rviz"
+          args="-d $(find sigmafp)/rviz/OpenLORIS.rviz"/>
+
+    <!--
+    ### RF2O ODOMETRY ###
+    <param name="/use_sim_time" value="true"/>
+
+    <node pkg="rf2o_laser_odometry" type="rf2o_laser_odometry_node" name="rf2o_laser_odometry" launch-prefix="$(arg launch_prefix)">
+        <param name="laser_scan_topic" value="/scan"/>        ### topic where the lidar scans are being published
+        <param name="odom_topic" value="/odom" />                   ### topic where to publish the odometry estimations
+        <param name="publish_tf" value="true" />                    ### wheter or not to publish the tf::transform (base->odom)
+        <param name="base_frame_id" value="/base_link"/>            ### frame_id (tf) of the mobile robot base. A tf transform from the laser_frame to the base_frame is mandatory
+        <param name="odom_frame_id" value="/odom" />                ### frame_id (tf) to publish the odometry estimations
+        <param name="freq" value="15.0"/>                            ### Execution frequency. See "Planar Odometry from a Radial Laser Scanner. A Range Flow-based Approach. ICRA'16"
+        <param name="init_pose_from_topic" value="" />
+     </node>
+
+     <node pkg="sigma-FP" type="tf_br.py" name="tf_br" launch-prefix="$(arg launch_prefix)">
+     </node>
+
+    ### AMCL ###
+    <param name="/use_sim_time" value="true"/>
+    <node pkg="amcl" type="amcl" name="amcl" launch-prefix="$(arg launch_prefix)">
+        ### Initial pose
+        <param name="initial_pose_x" value="0.0"/>         #m
+        <param name="initial_pose_y" value="0.0"/>        #m
+        <param name="initial_pose_a" value="0.0"/>         #rad
+
+        ### Filter params
+        <param name="min_particles" value="200"/>
+        <param name="max_particles" value="1000"/>
+        <param name="kld_err" value="0.05"/>
+        <param name="kld_z" value="0.99"/>
+        <param name="update_min_d" value="0.1"/>    ### Translational movement required before performing a filter update.
+        <param name="update_min_a" value="0.1"/>    ### Rotational movement required before performing a filter update. (rad)
+        <param name="resample_interval" value="1"/>
+        <param name="transform_tolerance" value="0.2"/>
+        <param name="recovery_alpha_slow" value="0.001"/>
+        <param name="recovery_alpha_fast" value="0.1"/>
+        <param name="gui_publish_rate" value="10.0"/>       # Max rate(Hz) for scans/paths published for visualization (-1.0 disable)
+
+
+        ### Laser model
+        <param name="laser_model_type" value="likelihood_field"/>   ###The likelihood_field model uses only: z_hit and z_rand.
+        <param name="laser_z_hit" value="0.5"/>
+        <param name="laser_z_rand" value="0.5"/>
+        <param name="laser_z_short" value="0.05"/>
+        <param name="laser_z_max" value="0.05"/>
+        <param name="laser_max_beams" value="100"/>
+
+        ### Odometry model
+        <param name="odom_model_type" value="diff-corrected"/>
+        <param name="odom_alpha1" value="0.001"/>     ### expected noise in odometry's rotation estimate from the rotational component
+        <param name="odom_alpha2" value="0.001"/>     ### expected noise in odometry's rotation estimate from the translational component
+        <param name="odom_alpha3" value="0.001"/>     ### expected noise in odometry's translation estimate from the translational component
+        <param name="odom_alpha4" value="0.001"/>     ### expected noise in odometry's translation estimate from the rotational component
+        <param name="odom_alpha5" value="0.1"/>     ### Translation-related noise parameter (only used if model is "omni").
+        <param name="odom_frame_id" value="odom"/>
+        <param name="base_frame_id" value="base_link"/>
+        <param name="global_frame_id" value="map"/>
+        <param name="tf_broadcast" value="true"/>
+    </node>
+    -->
+</launch>

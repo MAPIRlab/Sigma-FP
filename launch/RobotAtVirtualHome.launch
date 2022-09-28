@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+
+    <arg name="amcl" default="n"/>  ### y (Yes), n (No)
+
+    <remap from="/RobotAtVirtualHome/scan" to="scan"/>
+
+    ### ROSBRIDGE ###
+    <!--<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>-->
+
+    ### FLOORPLAN RECONSTRUCTION ###
+    <node name="sigmafp" pkg="sigmafp" type="fast-sigma-FP.py" output="screen">
+        <param name="dataset" value="RobotAtVirtualHome"/>
+        <param name="topic_cameraRGB" value="RobotAtVirtualHome/VirtualCameraRGB"/>
+        <param name="topic_cameraDepth" value="RobotAtVirtualHome/VirtualCameraDepth"/>
+        <param name="topic_result" value="ViMantic/Detections"/>
+        <param name="topic_republic" value="ViMantic/ToCNN"/>
+        <param name="topic_cnn" value="detectron2_ros/result"/>
+        <param name="debug" value="true"/>
+        <param name="image_width" value="640"/>
+        <param name="image_height" value="480"/>
+        <param name="camera_cx" value="320"/>
+        <param name="camera_cy" value="240"/>
+        <param name="camera_fx" value="304.0859"/>
+        <param name="camera_fy" value="312.7741"/>
+        <param name="camera_depth_max_range" value="10.0"/>
+        <param name="points_in_pcd" value="4000"/>
+        <param name="min_points_plane" value="100"/>
+        <param name="min_plane_width" value="0.8"/>
+        <param name="min_px_opening" value="5000"/>
+        <param name="bhattacharyya_threshold" value="15"/>
+        <param name="euclidean_threshold" value="0.3"/>
+        <param name="eps_alpha" value="10.0"/>
+        <param name="eps_beta" value="5.0"/>
+        <param name="eps_dist" value="0.02"/>
+    </node>
+
+    ### NAVIGATION ###
+    <arg name="map_file" value="$(find sigmafp)/maps/ViMantic_House30.yaml"/>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" launch-prefix=""/>
+
+    ### RVIZ ###
+    <node name="rviz_player" pkg="rviz" type="rviz"
+          args="-d $(find sigmafp)/rviz/RobotAtVirtualHome.rviz"/>
+
+    ### ROBOT LOCALIZATION ###
+  <group if="$(eval arg('amcl') == 'y')">
+  <!-- <remap from="scan" to="/RobotAtVirtualHome/scan"/>  topic id to read scan lasers from -->
+      <arg name="launch_prefix" default="" />
+      <node pkg="amcl" type="amcl" name="amcl" launch-prefix="$(arg launch_prefix)">
+        ### Initial pose
+        House 30
+        <param name="initial_pose_x" value="-1.43"/>         #m
+        <param name="initial_pose_y" value="-3.37"/>        #m
+        <param name="initial_pose_a" value="0.0"/>     #rad
+
+        ### Filter params
+        <param name="min_particles" value="100"/>   #200
+        <param name="max_particles" value="1000"/>
+        <param name="kld_err" value="0.05"/>
+        <param name="kld_z" value="0.99"/>
+        <param name="update_min_d" value="0.0"/>    ### Translational movement required before performing a filter update.
+        <param name="update_min_a" value="0.0"/>    ### Rotational movement required before performing a filter update. (rad)
+        <param name="resample_interval" value="1"/>
+        <param name="transform_tolerance" value="0.2"/> #0.2
+        <param name="recovery_alpha_slow" value="0.001"/> #0.001
+        <param name="recovery_alpha_fast" value="0.1"/> #0.1
+        <param name="gui_publish_rate" value="-1.0"/>   ### 10 Maximum rate (Hz) at which scans and paths are published for visualization, -1.0 to disable.
+
+        ### Laser model
+        <param name="laser_model_type" value="likelihood_field"/>   ###The likelihood_field model uses only: z_hit and z_rand.
+        <param name="laser_z_hit" value="0.5"/>
+        <param name="laser_z_rand" value="0.5"/>
+        <param name="laser_z_short" value="0.05"/>
+        <param name="laser_z_max" value="0.05"/>
+
+        ### Odometry model
+        <param name="odom_model_type" value="omni"/>
+        <param name="odom_alpha1" value="0.2"/>     ### expected noise in odometry's rotation estimate from the rotational component
+        <param name="odom_alpha2" value="0.2"/>     ### expected noise in odometry's rotation estimate from the translational component
+        <param name="odom_alpha3" value="0.15"/>     ### expected noise in odometry's translation estimate from the translational component
+        <param name="odom_alpha4" value="0.15"/>     ### expected noise in odometry's translation estimate from the rotational component
+        <param name="odom_alpha5" value="0.1"/>     ### Translation-related noise parameter (only used if model is "omni").
+        <param name="odom_frame_id" value="odom_0"/>
+        <param name="base_frame_id" value="base_link"/>
+        <param name="global_frame_id" value="map"/>
+        <param name="tf_broadcast" value="false"/>
+      </node>
+    </group>
+
+</launch>
