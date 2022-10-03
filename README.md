@@ -7,13 +7,12 @@
 ### Content
 <p align="center"> <a href="#citation">Citation</a>&nbsp;&nbsp;&nbsp;<a href="#installationandrequirements">Installation&nbsp;and&nbsp;Requirements</a>&nbsp;&nbsp;&nbsp;<a href="#configuration">Configuration</a>&nbsp;&nbsp;&nbsp;<a href="#howtorun">How&nbsp;to&nbsp;Run</a>&nbsp;&nbsp;&nbsp;<a href="#datasets">Datasets</a></p></p>
 
-## <p align="center"> <sup></sup>The source code will be released once the work is accepted. </p>
-
 ### Citation
 <pre><code>@article{matez2022,  
     title={Sigma-FP: Robot Mapping of 3D Floor Plans with an RGB-D Camera under Uncertainty},  
     author={Matez-Bandera, Jose-Luis and Monroy, Javier and Gonzalez-Jimenez, Javier},  
-    year={2022},  
+    year={2022},
+    journal={IEEE Robotics and Automation Letters},
     note={Under Review}  
     }
 </code></pre>
