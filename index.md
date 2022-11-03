@@ -29,7 +29,6 @@ The code of Sigma-FP is available as a ROS package at <a href="https://github.co
 <pre><code>@article{matez2022,  
     title={Sigma-FP: Robot Mapping of 3D Floor Plans with an RGB-D Camera under Uncertainty},  
     author={Matez-Bandera, Jose-Luis and Monroy, Javier and Gonzalez-Jimenez, Javier},  
-    year={2022},  
     journal={IEEE Robotics and Automation Letters},
     year={2022},
     publisher={IEEE}
