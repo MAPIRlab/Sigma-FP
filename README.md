@@ -13,7 +13,9 @@
     author={Matez-Bandera, Jose-Luis and Monroy, Javier and Gonzalez-Jimenez, Javier},  
     year={2022},
     journal={IEEE Robotics and Automation Letters},
-    note={Under Review}  
+    journal={IEEE Robotics and Automation Letters},
+    year={2022},
+    publisher={IEEE}
     }
 </code></pre>
 
