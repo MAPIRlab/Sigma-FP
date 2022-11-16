@@ -8,7 +8,7 @@
 <p align="center"> <a href="#citation">Citation</a>&nbsp;&nbsp;&nbsp;<a href="#installationandrequirements">Installation&nbsp;and&nbsp;Requirements</a>&nbsp;&nbsp;&nbsp;<a href="#configuration">Configuration</a>&nbsp;&nbsp;&nbsp;<a href="#howtorun">How&nbsp;to&nbsp;Run</a>&nbsp;&nbsp;&nbsp;<a href="#datasets">Datasets</a></p></p>
 
 ### Citation
-<pre><code>@ARTICLE{9940597,
+<pre><code>@ARTICLE{matez_sigmafp,
   author={Matez-Bandera, Jose-Luis and Monroy, Javier and Gonzalez-Jimenez, Javier},
   journal={IEEE Robotics and Automation Letters}, 
   title={Sigma-FP: Robot Mapping of 3D Floor Plans With an RGB-D Camera Under Uncertainty}, 
