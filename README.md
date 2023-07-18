@@ -5,7 +5,7 @@
 <p align="center"> <sup>1</sup> Machine Perception and Intelligent Robotics (MAPIR) Group,<br/> Malaga Institute for Mechatronics Engineering and Cyber-Physical Systems (IMECH.UMA).<br/> University of Malaga. Spain. </p>
 
 ### Content
-<p align="center"> <a href="#citation">Citation</a>&nbsp;&nbsp;&nbsp;<a href="#installationandrequirements">Installation&nbsp;and&nbsp;Requirements</a>&nbsp;&nbsp;&nbsp;<a href="#configuration">Configuration</a>&nbsp;&nbsp;&nbsp;<a href="#howtorun">How&nbsp;to&nbsp;Run</a>&nbsp;&nbsp;&nbsp;<a href="#datasets">Datasets</a></p></p>
+<p align="center"> <a href="#citation">Citation</a>&nbsp;&nbsp;&nbsp;<a href="#installationandrequirements">Installation&nbsp;and&nbsp;Requirements</a>&nbsp;&nbsp;&nbsp;<a href="#configuration">Configuration</a>&nbsp;&nbsp;&nbsp;<a href="#howtorun">How&nbsp;to&nbsp;Run</a>&nbsp;&nbsp;&nbsp;<a href="#datasets">Datasets</a>&nbsp;&nbsp;&nbsp;<a href="#extractdataforcolmap">Extract&nbsp;Data&nbsp;for&nbsp;COLMAP</a></p></p>
 
 ### Citation
 <pre><code>@ARTICLE{matez_sigmafp,
@@ -116,7 +116,7 @@ Once the semantic segmentation network is ready, you can run Sigma-FP as follows
 
 If you are interested in reproducing results, please contact us at <a>josematez@uma.es</a> to provide the employed datasets.
 
-### Extract Data for COLMAP Reconstruction
+### Extract&nbsp;Data&nbsp;for&nbsp;COLMAP
 
 From the maps built with Sigma-FP, you can extract the information required to reconstruct the same environment with COLMAP, obtaining directly the data from Sigma-FP in COLMAP's format. To do so, you have to add in the launch file the following parameters:
 
