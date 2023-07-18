@@ -4,7 +4,7 @@
   <arg name="launch_prefix" default="" />
 
     ### FLOORPLAN RECONSTRUCTION ###
-    <node name="sigmafp" pkg="sigmafpp" type="sigma-FP.py" output="screen">
+    <node name="sigmafp" pkg="sigmafp" type="sigma-FP.py" output="screen">
         <param name="dataset" value="Giraff"/>
         <param name="topic_cameraRGB" value="camera_down/rgb/image_raw/compressed"/>
         <param name="topic_cameraDepth" value="/camera_down/depth/image"/>
