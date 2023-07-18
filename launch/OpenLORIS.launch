@@ -5,7 +5,7 @@
     <param name="/use_sim_time" value="true"/>
 
     ### FLOORPLAN RECONSTRUCTION ###
-    <node name="sigmafp" pkg="sigmafp" type="fast-sigma-FP.py" output="screen">
+    <node name="sigmafp" pkg="sigmafp" type="sigma-FP.py" output="screen">
         <param name="dataset" value="OpenLORIS"/>
         <param name="topic_cameraRGB" value="/d400/color/image_raw"/>
         <param name="topic_cameraDepth" value="/d400/depth/image_raw"/>

@@ -6,10 +6,10 @@
     <remap from="/RobotAtVirtualHome/scan" to="scan"/>
 
     ### ROSBRIDGE ###
-    <!--<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>-->
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
 
     ### FLOORPLAN RECONSTRUCTION ###
-    <node name="sigmafp" pkg="sigmafp" type="fast-sigma-FP.py" output="screen">
+    <node name="sigmafp" pkg="sigmafp" type="sigma-FP.py" output="screen">
         <param name="dataset" value="RobotAtVirtualHome"/>
         <param name="topic_cameraRGB" value="RobotAtVirtualHome/VirtualCameraRGB"/>
         <param name="topic_cameraDepth" value="RobotAtVirtualHome/VirtualCameraDepth"/>
