@@ -127,9 +127,9 @@ From the maps built with Sigma-FP, you can extract the information required to r
       # Set if the sequence is mapping or localization.
       <param name="data_category" value="localization"/>
       # Set the path where the map in COLMAP format is saved.
-      <param name="save_path" value="/home/eostajm/datasets/openloris_home/results/"/>
+      <param name="save_path" value="/home/jose/Documentos/Datasets/RobotAtVirtualHome/VL/house20/results/"/>
       # Set the path to the Sigma-FP map.
-      <param name="map_path" value="/home/eostajm/datasets/openloris_home/results/wallmap_refined.npy"/>
+      <param name="map_path" value="/home/jose/Documentos/Datasets/RobotAtVirtualHome/VL/house20/results/wallmap_refined.npy"/>
 ```
 Based on the previous parameters, you need to follow the next steps:
 
