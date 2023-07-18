@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>sigmafpp</name>
+  <name>sigmafp</name>
   <version>0.0.0</version>
-  <description>The sigmafpp package</description>
+  <description>The sigmafp package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
