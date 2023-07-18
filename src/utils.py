@@ -21,7 +21,6 @@ class PlaneManager(object):
     # Initialization
     def __init__(self, height, width, cx, cy, fx, fy, max_depth, min_px_opening):
         """
-
         :param height: height of the camera image in px
         :param width: width of the camera image in px
         :param cx: horizontal position of the camera center
