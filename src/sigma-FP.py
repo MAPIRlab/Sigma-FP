@@ -31,7 +31,10 @@ from sigmafp.msg import WallMeshArray
 
 from modules.planes import PlaneManager
 from modules.transformations import Transformations
+from modules.external_transformations import *
+from modules.datasaver import DataSaver
 from modules.datasets import Datasets
+
 
 class FloorplanReconstruction(object):
     def __init__(self):
@@ -49,8 +52,11 @@ class FloorplanReconstruction(object):
         # Data parameters
         self.dataset = self.load_param('~dataset', "RobotAtVirtualHome")
         self.data_mode = self.load_param('~data_mode', "real")  # real: with uncertainty / gt: groundtruth
-        self.save_path = self.load_param('~save_path', "/home/josematez/datasets/mapirlab/results/")
-
+        self.save_colmap = self.load_param('~save_colmap', True)
+        self.data_category = self.load_param('~data_category', "mapping") # mapping / localization
+        self.save_path = self.load_param('~save_path', "/home/eostajm/datasets/mapirlab/results/")
+        self.map_path = self.load_param('~map_path', "/home/josematez/datasets/uhumans2/results/wallmap_no_refined.npy")
+        
         # Camera Calibration
         self._width = self.load_param('~image_width', 640)
         self._height = self.load_param('~image_height', 480)
@@ -128,13 +134,26 @@ class FloorplanReconstruction(object):
         if self.data_mode == "real":
             rospy.Subscriber(self.cnn_topic, ResultWithWalls, self.callback_new_detection)
             message_filter = message_filters.ApproximateTimeSynchronizer([sub_depth_image, sub_rgb_image, sub_pose_amcl],
-                                                                     1, 0.1)
+                                                                     1, 0.01)
         elif self.data_mode == "gt":
             sub_seg_image = message_filters.Subscriber(self.cnn_topic, Image)
             message_filter = message_filters.ApproximateTimeSynchronizer([sub_depth_image, sub_rgb_image, sub_pose_amcl, sub_seg_image],
                                                                      1, 0.01)
 
         message_filter.registerCallback(self.callback_synchronize_image)
+
+        
+
+        # Save data for COLMAP
+        if self.save_colmap:
+            self._ds = DataSaver(self.map_path, self.save_path, self._width, self._height, self._fx, self._fy,
+                                self._cx, self._cy)
+            
+            if self._ds.load_global_map():
+                print("[DATASAVER] Global map for wall mask generation has been loaded correctly.")
+            else:
+                print("[DATASAVER] Loading global map failed. Disabling datasaver.")
+                self.save_colmap = False
         
         rospy.logwarn("Initialized")
 
@@ -151,12 +170,10 @@ class FloorplanReconstruction(object):
             # Extracting and projecting detected walls
             if self._flag_processing and self._flag_cnn:
 
-
                 if self.data_mode == "real":
                     wall_mask = self._bridge.imgmsg_to_cv2(self._last_cnn_result.walls) == 255
                 elif self.data_mode == "gt":
                     wall_mask = self._last_msg[-1]
-
 
                 # Check if there are pixels belonging to walls in the image
                 if wall_mask.sum() == 0:
@@ -234,7 +251,6 @@ class FloorplanReconstruction(object):
                 dbscan_data = np.concatenate((alpha, beta, distance_to_origin), axis=1)
                 dbscan_data_scaled = dbscan_data / np.asarray([self._eps_alpha, self._eps_beta, self._eps_dist])
 
-
                 # TODO: Testing: trying to include xy coords in the clustering
                 dbscan_data1 = np.concatenate((alpha, beta, distance_to_origin, pcd_np[:,0].reshape(-1, 1), pcd_np[:,1].reshape(-1, 1)), axis=1)
                 #dbscan_data1 = np.concatenate((alpha, beta, distance_to_origin, np.linalg.norm(pcd_np[:,:2], axis = 1).reshape(-1, 1)), axis=1)
@@ -255,6 +271,22 @@ class FloorplanReconstruction(object):
 
                 # Time for plane extraction
                 self._time_plane_extraction += time.time() - time_start
+
+                xyz_img = np.dstack((z,x,y))
+                
+                if self.save_colmap:
+                    
+                    # Compute xyz image global
+                    pcd_aux = o3d.geometry.PointCloud(points=o3d.utility.Vector3dVector(np.array([z.reshape(-1), x.reshape(-1), y.reshape(-1)]).T))
+                    pcd_aux.transform(tr_matrix_camera_map)
+                    xyz_img_global = np.array(pcd_aux.points).reshape((xyz_img.shape[0], xyz_img.shape[1], 3))
+                    
+                    # Set to True if want to add current walls to the reference map for saving data
+                    if False:
+                        self._ds.add_current_map(deepcopy(self._walls))
+
+                    #planes_mask = self._ds.compute_planes_mask(xyz_img_global, residuals = False, limits = True)
+                    planes_mask, planes_mask_ceilingfloor = self._ds.compute_instance_planes_mask(xyz_img_global, residuals = True, limits = True)
                  
                 # Characterizing each clustered wall by: its Gaussian distribution and a set of features
                 for idx in range(max_label.astype(np.int_) + 1):
@@ -311,27 +343,48 @@ class FloorplanReconstruction(object):
                         continue
 
                     # Extracting openings in walls
-                    opening_start = time.time()
-                    wall_dict["openings"], plane_info_img = self._pm.detect_openings_in_plane(wall_dict, inv_tr_matrix,
-                                                                        self._last_msg[1], np.divide(self._last_msg[2], self._depth_range_max))
-                    self._time_opening_detection += time.time() - opening_start
-                    self._n_iterations_openings += 1
+                    if False:
+                        opening_start = time.time()
+                        wall_dict["openings"], plane_info_img = self._pm.detect_openings_in_plane(wall_dict, inv_tr_matrix,
+                                                                            self._last_msg[1], np.divide(self._last_msg[2], self._depth_range_max), xyz_img)
+                        self._time_opening_detection += time.time() - opening_start
+                        self._n_iterations_openings += 1
+                    else:
+                        wall_dict["openings"] = {}
+                        plane_info_img = None
+                        self._time_opening_detection += 1
+                        self._n_iterations_openings += 1
 
           
                     self._walls[str(self._num_walls)] = wall_dict
                     self._num_walls += 1
+
+
+                if self.save_colmap:
+
+                    #planes_mask = np.logical_and(np.logical_and(z > 0.01, z < 5.), planes_mask)
+
+                    #planes_mask = np.logical_and(np.logical_and(y > -1.35, y < 1.5), planes_mask)
+                    #planes_mask = np.logical_or(wall_mask.astype(bool), planes_mask)
+                    #planes_mask = (255*planes_mask).astype(np.uint8)
+
+                    self._ds.write_data(self._last_msg[1], planes_mask, tr_matrix_camera_map, mode = self.data_category, depth_img = self._last_msg[2], planes_mask_ceilingfloor = planes_mask_ceilingfloor)
+                    #self._ds.write_data(self._last_msg[1], planes_mask, tr_matrix_camera_map, mode = "localization")
+
+                    #self._pub_masked_image.publish(self._bridge.cv2_to_imgmsg(cv2.bitwise_and(self._last_msg[1], self._last_msg[1], mask=planes_mask.astype(np.uint8)), 'rgb8'))
+                    
 
                 # Another clustering approach
                 matching_start = time.time()
                 order, plane_features = self._pm.plane_dict_to_features_comp(self._walls)
 
                 # Data association and integration process
-                if self.data_mode == "real":
+                if self.data_mode == "real" and self.dataset != "OpenLORIS" and self.dataset != "TUM":
                     new_walls, num_walls = self._pm.match_and_merge_planes(self._walls, plane_features, order,
                                                                         self._pm.bhattacharyya_distance_features,
                                                                         self._bhattacharyya_threshold,
                                                                         self._euclidean_threshold)
-                elif self.data_mode == "gt":
+                elif self.data_mode == "gt" or self.dataset == "OpenLORIS" or self.dataset == "TUM":
                     new_walls, num_walls = self._pm.match_and_merge_planes(self._walls, plane_features, order,
                                                                         self._pm.error_free_distance,
                                                                         self._bhattacharyya_threshold,
@@ -346,7 +399,6 @@ class FloorplanReconstruction(object):
 
                 # Showing current floorplan
                 self._walls_pub.publish(self._pm.create_msg_walls_markers(self._walls))
-
 
                 # Print time information
                 try:
