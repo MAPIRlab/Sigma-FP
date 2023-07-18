@@ -115,3 +115,28 @@ Once the semantic segmentation network is ready, you can run Sigma-FP as follows
 ### Datasets
 
 If you are interested in reproducing results, please contact us at <a>josematez@uma.es</a> to provide the employed datasets.
+
+### Extract Data for COLMAP Reconstruction
+
+From the maps built with Sigma-FP, you can extract the information required to reconstruct the same environment with COLMAP, obtaining directly the data from Sigma-FP in COLMAP's format. To do so, you have to add in the launch file the following parameters:
+
+```bash
+### Saving data ###
+      # Flag to activate the data saving in COLMAP format.
+      <param name="save_colmap" value="true"/>
+      # Set if the sequence is mapping or localization.
+      <param name="data_category" value="localization"/>
+      # Set the path where the map in COLMAP format is saved.
+      <param name="save_path" value="/home/eostajm/datasets/openloris_home/results/"/>
+      # Set the path to the Sigma-FP map.
+      <param name="map_path" value="/home/eostajm/datasets/openloris_home/results/wallmap_refined.npy"/>
+```
+Based on the previous parameters, you need to follow the next steps:
+
+  1. Build and save a Sigma-FP map. To do so, run our method with the flag "save_colmap" set to False. Then, when the map building is finished and before closing the node, publish in the console an empty message in the /wallmap_commands topic to save the Sigma-FP map in the "save_path" directory:
+     
+                <code>rostopic pub /wallmap_commands std_msgs/String "data: ''"</code><br/>
+    
+  2. Then, to extract data prepared for COLMAP from the built environment, activate the flag "save_colmap", set correctly the "map_path" to the recently built map and run again Sigma-FP. It will create a directory called "mapping" or "localization" (depending on the data category set in the launch file) including the data required for COLMAP in addition to image masks of the walls observed in each RGB frame.
+
+If you have any questions, please contact me at <a>josematez@uma.es</a> or open an issue.
