@@ -956,10 +956,10 @@ class PlaneManager(object):
 
         plane_cov = np.asarray([[pps_cov[0, 0], pps_cov[0, -1]], [pps_cov[-1, 0], pps_cov[-1, -1]]], dtype=np.float64)
 
-        pps_mean_global = np.asarray([[((pps_mean[0] + theta))],
-                                      [pi / 2],
+        pps_mean_global = np.asarray([[(pps_mean[0] + theta).item()],
+                                      [pi / 2.],
                                       [(pps_mean[-1] + np.linalg.norm(np.asarray([x, y])) * cos(
-                                          (theta + pps_mean[0] - atan2(y, x))))]],
+                                          (theta + pps_mean[0] - atan2(y, x)))).item()]],
                                      dtype=np.float64)
 
         j_pose = self.jacobian_pose(x, y, theta, pps_mean[0])
