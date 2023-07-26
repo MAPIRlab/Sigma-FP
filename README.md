@@ -5,7 +5,7 @@
 <p align="center"> <sup>1</sup> Machine Perception and Intelligent Robotics (MAPIR) Group,<br/> Malaga Institute for Mechatronics Engineering and Cyber-Physical Systems (IMECH.UMA).<br/> University of Malaga. Spain. </p>
 
 ### Content
-<p align="center"> <a href="#citation">Citation</a>&nbsp;&nbsp;&nbsp;<a href="#installationandrequirements">Installation&nbsp;and&nbsp;Requirements</a>&nbsp;&nbsp;&nbsp;<a href="#configuration">Configuration</a>&nbsp;&nbsp;&nbsp;<a href="#howtorun">How&nbsp;to&nbsp;Run</a>&nbsp;&nbsp;&nbsp;<a href="#datasets">Datasets</a></p></p>
+<p align="center"> <a href="#citation">Citation</a>&nbsp;&nbsp;&nbsp;<a href="#installationandrequirements">Installation&nbsp;and&nbsp;Requirements</a>&nbsp;&nbsp;&nbsp;<a href="#configuration">Configuration</a>&nbsp;&nbsp;&nbsp;<a href="#howtorun">How&nbsp;to&nbsp;Run</a>&nbsp;&nbsp;&nbsp;<a href="#datasets">Datasets</a>&nbsp;&nbsp;&nbsp;<a href="#extractdataforcolmap">Extract&nbsp;Data&nbsp;for&nbsp;COLMAP</a></p></p>
 
 ### Citation
 <pre><code>@ARTICLE{matez_sigmafp,
@@ -115,3 +115,28 @@ Once the semantic segmentation network is ready, you can run Sigma-FP as follows
 ### Datasets
 
 If you are interested in reproducing results, please contact us at <a>josematez@uma.es</a> to provide the employed datasets.
+
+### Extract&nbsp;Data&nbsp;for&nbsp;COLMAP
+
+From the maps built with Sigma-FP, you can extract the information required to reconstruct the same environment with COLMAP, obtaining directly the data from Sigma-FP in COLMAP's format. To do so, you have to add in the launch file the following parameters:
+
+```bash
+### Saving data ###
+      # Flag to activate the data saving in COLMAP format.
+      <param name="save_colmap" value="true"/>
+      # Set if the sequence is mapping or localization.
+      <param name="data_category" value="localization"/>
+      # Set the path where the map in COLMAP format is saved.
+      <param name="save_path" value="/home/jose/Documentos/Datasets/RobotAtVirtualHome/VL/house20/results/"/>
+      # Set the path to the Sigma-FP map.
+      <param name="map_path" value="/home/jose/Documentos/Datasets/RobotAtVirtualHome/VL/house20/results/wallmap_refined.npy"/>
+```
+Based on the previous parameters, you need to follow the next steps:
+
+  1. Build and save a Sigma-FP map. To do so, run our method with the flag "save_colmap" set to False. Then, when the map building is finished and before closing the node, publish in the console an empty message in the /wallmap_commands topic to save the Sigma-FP map in the "save_path" directory:
+     
+                <code>rostopic pub /wallmap_commands std_msgs/String "data: ''"</code><br/>
+    
+  2. Then, to extract data prepared for COLMAP from the built environment, activate the flag "save_colmap", set correctly the "map_path" to the recently built map and run again Sigma-FP. It will create a directory called "mapping" or "localization" (depending on the data category set in the launch file) including the data required for COLMAP in addition to image masks of the walls observed in each RGB frame.
+
+If you have any questions, please contact me at <a>josematez@uma.es</a> or open an issue.
