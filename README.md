@@ -40,7 +40,7 @@ Additionally, it is required to install the following ROS packages:
 Build ROS workspace:
 
 <code>cd ~/your_ros_workspace</code><br/>
-<code>cd catkin_make</code>
+<code>catkin_make</code>
 
 Sigma-FP requires a per-pixel semantic segmentation network to run. We have employed Detectron2, but any other per-pixel semantic segmentation network can be used, although Sigma-FP code will need to be slightly adapted. In case you wish to use Detectron2, we have released our adaptation in the following repository: [detectron2_ros_probs](https://github.com/josematez/detectron2_ros_probs). The installation instructions are available in the repository.
 
