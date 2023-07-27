@@ -754,7 +754,7 @@ class PlaneManager(object):
             mean_cos_1 += planes[idx]["n_samples"] * cos(planes[idx]["mean"][0])
             mean_sin_2 += planes[idx]["n_samples"] * sin(planes[idx]["mean"][1])
             mean_cos_2 += planes[idx]["n_samples"] * cos(planes[idx]["mean"][1])
-            sum_distance += planes[idx]["n_samples"] * planes[idx]["mean"][2]
+            sum_distance += planes[idx]["n_samples"] * planes[idx]["mean"][2].item()
             fused_plane["cov"] += (float(planes[idx]["n_samples"]) ** 2 / float(fused_plane["n_samples"]) ** 2) \
                                   * planes[idx]["cov"]
 
@@ -780,7 +780,7 @@ class PlaneManager(object):
         plane_width = np.linalg.norm(fused_plane["max_bound"][:2] - fused_plane["min_bound"][:2])
         plane_height = fused_plane["max_bound"][2] - fused_plane["min_bound"][2]
 
-        img_openings = np.ones((int(100. * plane_height), int(100. * plane_width)), dtype = np.int) * -1
+        img_openings = np.ones((int(100. * plane_height), int(100. * plane_width)), dtype = np.int32) * -1
 
         # Fusing openings
         openings = []
@@ -837,7 +837,7 @@ class PlaneManager(object):
         plane_width = np.linalg.norm(fused_plane["max_bound"][:2] - fused_plane["min_bound"][:2])
         plane_height = fused_plane["max_bound"][2] - fused_plane["min_bound"][2]
 
-        img_openings = np.ones((int(100. * plane_height), int(100. * plane_width)), dtype = np.int) * -1
+        img_openings = np.ones((int(100. * plane_height), int(100. * plane_width)), dtype = np.int32) * -1
 
         # Fusing openings
         openings = []
@@ -1085,8 +1085,8 @@ class PlaneManager(object):
 
         mean1 = x1[0:3].astype(np.float_).reshape((3,))
         mean2 = x2[0:3].astype(np.float_).reshape((3,))
-        center1 = np.average(x1[12:].astype(np.float).reshape((4,2)), axis=0)
-        center2 = np.average(x2[12:].astype(np.float).reshape((4,2)), axis=0)
+        center1 = np.average(x1[12:].astype(np.float64).reshape((4,2)), axis=0)
+        center2 = np.average(x2[12:].astype(np.float64).reshape((4,2)), axis=0)
 
         normal2 = np.array([ np.cos(mean2[0]) * np.sin(mean2[1]), np.sin(mean2[0]) * np.sin(mean2[1]), np.cos(mean2[1])])
 
