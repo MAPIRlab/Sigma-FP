@@ -87,11 +87,11 @@ class PlaneManager(object):
         aXb_vec = np.cross(a_vec, b_vec)
 
         A = np.array([a_vec, b_vec, aXb_vec], dtype=np.float64)
-        d = np.array([-a[3], -b[3], 0.], dtype=np.float64).reshape(3, 1)
+        d = np.array([-a[3].item(), -b[3].item(), 0.], dtype=np.float64).reshape(3, 1)
 
         p_inter = np.linalg.solve(A, d).T[0]
 
-        return np.asarray([p_inter[0], p_inter[1], 0.], dtype=np.float64)
+        return np.asarray([p_inter[0].item(), p_inter[1].item(), 0.], dtype=np.float64)
 
     @staticmethod
     def min_distance_to_intersection(wall_corners, pt):

@@ -117,6 +117,7 @@ class FloorplanReconstruction(object):
 
         # Transformations
         self._camera_robot_transform = None     # Relative pose of the camera frame w.r.t. the robot frame
+        self._map_frame_name = self.load_param('~map_frame_name', "map")
 
         # Publishers
         self._pub_processed_image = rospy.Publisher(self.image_toCNN, Image, queue_size=1)
@@ -398,7 +399,7 @@ class FloorplanReconstruction(object):
                 self._walls = new_walls
 
                 # Showing current floorplan
-                self._walls_pub.publish(self._pm.create_msg_walls_markers(self._walls))
+                self._walls_pub.publish(self._pm.create_msg_walls_markers(self._walls, self._map_frame_name))
 
                 # Print time information
                 try:
