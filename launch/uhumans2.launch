@@ -20,6 +20,7 @@
       ### Dataset info ###
       <param name="dataset" value="uHumans2"/>
       <param name="data_mode" value="gt"/>
+      <param name="map_frame_name" value="world"/>
 
       ### Topics names ###
       <param name="topic_cameraRGB" value="tesse/left_cam/rgb/image_raw"/>
@@ -50,19 +51,15 @@
       <param name="eps_beta" value="4.0"/> # 5
       <param name="eps_dist" value="0.02"/>
 
-      ### SigmaFP-textures parameters ###
-      <param name="extract_textures" value="false"/>
-      <param name="feature_type" value="ORB"/>
-
       ### Saving data ###
       <param name="save_colmap" value="true"/>
       <param name="data_category" value="localization"/>
       <param name="save_path" value="/home/eostajm/datasets/uhumans2/results/"/>
       <param name="map_path" value="/home/eostajm/datasets/uhumans2/results/wallmap_no_refined.npy"/>
+      <param name="namestyle" value="timestamp"/>
       
       ### Flags ###
       <param name="debug" value="true"/>
-      <param name="mesh_to_unity" value="false"/>
       
   </node>
 

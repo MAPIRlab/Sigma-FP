@@ -56,7 +56,8 @@ class FloorplanReconstruction(object):
         self.data_category = self.load_param('~data_category', "mapping") # mapping / localization
         self.save_path = self.load_param('~save_path', "/home/eostajm/datasets/mapirlab/results/")
         self.map_path = self.load_param('~map_path', "/home/josematez/datasets/uhumans2/results/wallmap_no_refined.npy")
-        
+        self.namestyle = self.load_param('~namestyle', "index") # index / timestamp
+
         # Camera Calibration
         self._width = self.load_param('~image_width', 640)
         self._height = self.load_param('~image_height', 480)
@@ -369,7 +370,10 @@ class FloorplanReconstruction(object):
                     #planes_mask = np.logical_or(wall_mask.astype(bool), planes_mask)
                     #planes_mask = (255*planes_mask).astype(np.uint8)
 
-                    self._ds.write_data(self._last_msg[1], planes_mask, tr_matrix_camera_map, mode = self.data_category, depth_img = self._last_msg[2], planes_mask_ceilingfloor = planes_mask_ceilingfloor)
+                    self._ds.write_data(self._last_msg[1], planes_mask, tr_matrix_camera_map, mode=self.data_category,
+                                        depth_img=self._last_msg[2], planes_mask_ceilingfloor=planes_mask_ceilingfloor,
+                                        namestyle=self.namestyle, header=self._last_msg[0])
+
                     #self._ds.write_data(self._last_msg[1], planes_mask, tr_matrix_camera_map, mode = "localization")
 
                     #self._pub_masked_image.publish(self._bridge.cv2_to_imgmsg(cv2.bitwise_and(self._last_msg[1], self._last_msg[1], mask=planes_mask.astype(np.uint8)), 'rgb8'))

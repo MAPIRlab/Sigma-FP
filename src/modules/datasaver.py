@@ -120,7 +120,8 @@ class DataSaver(object):
 
                 plane = reference_map[k]["mean"]
 
-                self.normals_r[idx,:] = [ np.cos(plane[0]) * np.sin(plane[1]), np.sin(plane[0]) * np.sin(plane[1]), np.cos(plane[1])]
+                self.normals_r[idx, :] = [(np.cos(plane[0]) * np.sin(plane[1])).item(),
+                                          (np.sin(plane[0]) * np.sin(plane[1])).item(), np.cos(plane[1]).item()]
                 p1 = (reference_map[k]["max_bound"] + reference_map[k]["min_bound"]) / 2.0
                 self.centers_r[idx,:] = p1 + (plane[2] - sum(p1 * self.normals_r[idx,:])) / sum(self.normals_r[idx,:] * self.normals_r[idx,:]) * self.normals_r[idx,:]
                 self.maxb_r[idx,:] = reference_map[k]["max_bound"].reshape((1,3)) + 0.15
@@ -246,13 +247,14 @@ class DataSaver(object):
         
         return planes_mask
 
-    def write_data(self, img_rgb, planes_mask, pose, mode = "mapping", cam_id = 1, depth_img = None, planes_mask_ceilingfloor = None):
-        
+    def write_data(self, img_rgb, planes_mask, pose, mode="mapping", cam_id=1, depth_img=None,
+                   planes_mask_ceilingfloor=None, namestyle="index", header="None"):
+
         pose_c = pose @ self.Ry @ self.Rz
 
         r = np.eye(4, dtype=float)
-        r[:3,:3] = pose_c[:3, :3].T
-        p = -r[:3,:3] @ pose_c[:3,3]
+        r[:3, :3] = pose_c[:3, :3].T
+        p = -r[:3, :3] @ pose_c[:3, 3]
         trans = [str(x) for x in p.reshape((-1)).tolist()]
         trans = ' '.join(trans)
         q_pose = np.roll(quaternion_from_matrix(r), 1)
@@ -260,69 +262,83 @@ class DataSaver(object):
         q_pose = ' '.join(q_pose)
 
         if mode == "mapping":
-            img_path = self.map_dir + "images/image_" + "{0:05d}".format(self._k_mapping) + ".jpeg"
-            mask_path = self.map_dir + "masks/image_" + "{0:05d}".format(self._k_mapping) + ".jpeg.png"
+
+            if namestyle == "timestamp":
+                img_name = str(header.stamp.secs) + "_" + str(header.stamp.nsecs)
+            else:
+                img_name = "image_{0:05d}".format(self._k_mapping)
+
+            img_path = self.map_dir + "images/" + img_name + ".jpeg"
+            mask_path = self.map_dir + "masks/" + img_name + ".jpeg.png"
+            masks_binary_path = self.map_dir + "masks_binary/" + img_name + ".jpeg.png"
 
             if planes_mask_ceilingfloor is not None:
+                mask_ceilingfloor_path = self.map_dir + "masks_ceilingfloor/" + img_name + ".jpeg.png"
 
-                mask_ceilingfloor_path = self.map_dir + "masks_ceilingfloor/image_" + "{0:05d}".format(self._k_mapping) + ".jpeg.png"
                 cv2.imwrite(mask_ceilingfloor_path, planes_mask_ceilingfloor)
-            
-            # Borrar
-            masks_binary_path = self.map_dir + "masks_binary/image_" + "{0:05d}".format(self._k_mapping) + ".jpeg.png"
-            cv2.imwrite(masks_binary_path, (planes_mask>0).astype(np.uint8)*255)
 
             pose_path = self.map_dir + "input_model/images.txt"
             cv2.imwrite(img_path, cv2.cvtColor(img_rgb, cv2.COLOR_BGR2RGB))
             cv2.imwrite(mask_path, planes_mask)
-            pose_data = str(self._k_mapping + 1) + " " + q_pose + " " + trans + " " + str(cam_id) + " image_" + "{0:05d}".format(self._k_mapping) + ".jpeg"
+            cv2.imwrite(masks_binary_path, (planes_mask > 0).astype(np.uint8) * 255)
+            pose_data = str(self._k_mapping + 1) + " " + q_pose + " " + trans + " " + str(
+                cam_id) + " " + img_name + ".jpeg"
             with open(pose_path, 'a') as f:
-                    f.write(f'{pose_data}')
-                    f.write("\n\n")
+                f.write(f'{pose_data}')
+                f.write("\n\n")
 
             if cam_id != 1 or (self._k_mapping == 0 and cam_id == 1):
                 with open(self.map_dir + "input_model/cameras.txt", "a") as f:
                     if self.fx == self.fy:
-                        line = str(cam_id) + " SIMPLE_PINHOLE " + str(self.width) + " " + str(self.height) + " " + str(self.fx) + " " + str(self.cx) + " " + str(self.cy)
+                        line = str(cam_id) + " SIMPLE_PINHOLE " + str(self.width) + " " + str(self.height) + " " + str(
+                            self.fx) + " " + str(self.cx) + " " + str(self.cy)
                     else:
-                        line = str(cam_id) + " PINHOLE " + str(self.width) + " " + str(self.height) + " " + str(self.fx) + " " + str(self.fy) + " " + str(self.cx) + " " + str(self.cy)
+                        line = str(cam_id) + " PINHOLE " + str(self.width) + " " + str(self.height) + " " + str(
+                            self.fx) + " " + str(self.fy) + " " + str(self.cx) + " " + str(self.cy)
                     f.write(line)
                     f.write("\n")
-            
-            self._k_mapping += 1
-            
-        else:
-            if ((planes_mask > 0).sum() / planes_mask.size) > 0.35:
 
-                img_path = self.loc_dir + "images/query_" + "{0:05d}".format(self._k_localization) + ".jpeg"
-                mask_path = self.loc_dir + "masks/query_" + "{0:05d}".format(self._k_localization) + ".jpeg.png"
+            self._k_mapping += 1
+
+        else:
+            if ((planes_mask > 0).sum() / planes_mask.size) > 0.15:
+
+                if namestyle == "timestamp":
+                    img_name = str(header.stamp.secs) + "_" + str(header.stamp.nsecs)
+                else:
+                    img_name = "query_{0:05d}".format(self._k_localization)
+
+                img_path = self.loc_dir + "images/" + img_name + ".jpeg"
+                mask_path = self.loc_dir + "masks/" + img_name + ".jpeg.png"
+                masks_binary_path = self.loc_dir + "masks_binary/" + img_name + ".jpeg.png"
 
                 if planes_mask_ceilingfloor is not None:
+                    mask_ceilingfloor_path = self.loc_dir + "masks_ceilingfloor/" + img_name + ".jpeg.png"
 
-                    mask_ceilingfloor_path = self.loc_dir + "masks_ceilingfloor/query_" + "{0:05d}".format(self._k_localization) + ".jpeg.png"
                     cv2.imwrite(mask_ceilingfloor_path, planes_mask_ceilingfloor)
-
-                # Borrar
-                masks_binary_path = self.loc_dir + "masks_binary/image_" + "{0:05d}".format(self._k_localization) + ".jpeg.png"
-                cv2.imwrite(masks_binary_path, (planes_mask>0).astype(np.uint8)*255)
 
                 pose_path = self.loc_dir + "images.txt"
                 cv2.imwrite(img_path, cv2.cvtColor(img_rgb, cv2.COLOR_BGR2RGB))
                 cv2.imwrite(mask_path, planes_mask)
+                cv2.imwrite(masks_binary_path, (planes_mask > 0).astype(np.uint8) * 255)
                 if type(depth_img) != None:
-                    depth_path = self.loc_dir + "depths/query_" + "{0:05d}".format(self._k_localization) + ".png"
-                    cv2.imwrite(depth_path, (65535.*np.divide(depth_img, 10.)).astype(np.uint16))
-                pose_data = str(self._k_localization + 1) + " " + q_pose + " " + trans + " " + str(cam_id) + " query_" + "{0:05d}".format(self._k_localization) + ".jpeg"
+                    depth_path = self.loc_dir + "depths/" + img_name + ".png"
+
+                    cv2.imwrite(depth_path, (65535. * np.divide(depth_img, 10.)).astype(np.uint16))
+                pose_data = str(self._k_localization + 1) + " " + q_pose + " " + trans + " " + str(
+                    cam_id) + " " + img_name + ".jpeg"
                 with open(pose_path, 'a') as f:
-                        f.write(f'{pose_data}')
-                        f.write("\n\n")
+                    f.write(f'{pose_data}')
+                    f.write("\n\n")
 
                 if cam_id != 1 or (self._k_localization == 0 and cam_id == 1):
                     with open(self.loc_dir + "cameras.txt", "a") as f:
                         if self.fx == self.fy:
-                            line = str(cam_id) + " SIMPLE_PINHOLE " + str(self.width) + " " + str(self.height) + " " + str(self.fx) + " " + str(self.cx) + " " + str(self.cy)
+                            line = str(cam_id) + " SIMPLE_PINHOLE " + str(self.width) + " " + str(
+                                self.height) + " " + str(self.fx) + " " + str(self.cx) + " " + str(self.cy)
                         else:
-                            line = str(cam_id) + " PINHOLE " + str(self.width) + " " + str(self.height) + " " + str(self.fx) + " " + str(self.fy) + " " + str(self.cx) + " " + str(self.cy)
+                            line = str(cam_id) + " PINHOLE " + str(self.width) + " " + str(self.height) + " " + str(
+                                self.fx) + " " + str(self.fy) + " " + str(self.cx) + " " + str(self.cy)
                         f.write(line)
                         f.write("\n")
 
